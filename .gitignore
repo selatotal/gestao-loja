@@ -171,3 +171,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Application ###
+db/

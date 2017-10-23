@@ -3,9 +3,6 @@ package br.edu.ulbra.gestaoloja.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by talesviegas on 09/10/17.
- */
 @Controller
 @RequestMapping("/admin/produtos")
 public class AdminProdutoController {
