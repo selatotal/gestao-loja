@@ -78,9 +78,11 @@ public class UserControllerDemo {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteUserDemo(@PathVariable(name="id") Long id){
+    public ModelAndView deleteUserDemo(@PathVariable(name="id") Long id){
         User usuario = userRepository.findOne(id);
         userRepository.delete(usuario);
-        return "demo/user/delete";
+        return new ModelAndView("redirect:/demo/user/?usercreated=true");
+
     }
+
 }
