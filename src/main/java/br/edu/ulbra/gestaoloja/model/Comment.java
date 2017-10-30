@@ -1,6 +1,7 @@
 package br.edu.ulbra.gestaoloja.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Comment {
@@ -14,6 +15,10 @@ public class Comment {
 
     @Column(nullable = false)
     private String comment;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateTime;
 
     @ManyToOne(optional = false)
     private Product product;
@@ -59,5 +64,18 @@ public class Comment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setLiked(Boolean liked) {
+
+        this.liked = liked;
     }
 }
