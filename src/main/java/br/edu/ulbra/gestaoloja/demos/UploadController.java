@@ -16,10 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/upload")
+@RequestMapping("/demo/upload")
 public class UploadController {
 
     @Value("${gestao-loja.uploadFilePath}")
@@ -30,28 +31,35 @@ public class UploadController {
         ModelAndView mv = new ModelAndView("demo/upload/form");
         File directory = new File(uploadFilePath);
         File[] files = directory.listFiles();
-        mv.addObject("files", files);
+        List<String> fileList = new ArrayList<>();
+        for(File file : files){
+            fileList.add(file.getName());
+        }
+        mv.addObject("files", fileList);
         return mv;
     }
 
     @PostMapping
     public ModelAndView uploadFileAndData(UploadInput uploadInput) throws IOException {
-        ModelAndView mv = new ModelAndView("demo/upload/result");
+        ModelAndView mv = new ModelAndView("demo/upload/form");
 
         MultipartFile multipartFile = uploadInput.getMultipartFile();
 
         if (multipartFile != null){
-            multipartFile.transferTo(new File(uploadFilePath));
-            String fileName = uploadInput.getMultipartFile().getName();
+            String fileName = uploadInput.getMultipartFile().getOriginalFilename();
+            File file = new File(uploadFilePath+"/"+fileName);
+            file.createNewFile();
+            multipartFile.transferTo(file);
             mv.addObject("filename", fileName);
         }
         return mv;
     }
 
-    @GetMapping("/files/{fileName}")
+    @GetMapping("/files/{fileName:.+}")
     @ResponseBody
     public FileSystemResource getFile(@PathVariable("fileName") String fileName){
-        return new FileSystemResource(uploadFilePath + "/" + fileName);
+        FileSystemResource fileSystemResource = new FileSystemResource(uploadFilePath + "/" + fileName);
+        return fileSystemResource;
     }
 
 
