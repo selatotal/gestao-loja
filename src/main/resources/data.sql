@@ -1,1 +1,2 @@
-insert into user (username, password, name) VALUES ( 'user1', 'user1', 'Usuario 1');
+insert into role (name) VALUES ( 'ADMIN');
+insert into role (name) VALUES ( 'USER');

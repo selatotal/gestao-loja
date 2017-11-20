@@ -1,8 +1,11 @@
 package br.edu.ulbra.gestaoloja.demos;
 
 import br.edu.ulbra.gestaoloja.input.UserInput;
+import br.edu.ulbra.gestaoloja.model.Role;
 import br.edu.ulbra.gestaoloja.model.User;
+import br.edu.ulbra.gestaoloja.repository.RoleRepository;
 import br.edu.ulbra.gestaoloja.repository.UserRepository;
+import br.edu.ulbra.gestaoloja.service.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,13 +14,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/demo/user")
 public class UserControllerDemo {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     private ModelMapper mapper = new ModelMapper();
 
@@ -49,7 +59,9 @@ public class UserControllerDemo {
         }
 
         User user = mapper.map(userInput, User.class);
-        userRepository.save(user);
+        Set<Role> roles = roleRepository.findAllByName("USER");
+        user.setRoles(roles);
+        userService.save(user);
         return new ModelAndView("redirect:/demo/user/?usercreated=true");
     }
 
@@ -73,7 +85,7 @@ public class UserControllerDemo {
         usuario.setUsername(userInput.getUsername());
         usuario.setPassword(userInput.getPassword());
         usuario.setName(userInput.getName());
-        userRepository.save(usuario);
+        userService.save(usuario);
         return new ModelAndView("redirect:/demo/user/?usercreated=true");
     }
 
