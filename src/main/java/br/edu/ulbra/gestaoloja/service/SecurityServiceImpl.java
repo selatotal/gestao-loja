@@ -1,5 +1,7 @@
 package br.edu.ulbra.gestaoloja.service;
 
+import br.edu.ulbra.gestaoloja.model.User;
+import br.edu.ulbra.gestaoloja.repository.UserRepository;
 import br.edu.ulbra.gestaoloja.service.interfaces.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +20,22 @@ public class SecurityServiceImpl implements SecurityService{
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public String findLoggedInUsername(){
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails instanceof UserDetails){
             return ((UserDetails) userDetails).getUsername();
         }
         return null;
+    }
+
+    @Override
+    public User findLoggedInUser(){
+        String currentUser = this.findLoggedInUsername();
+        return userRepository.findByUsername(currentUser);
     }
 
     @Override

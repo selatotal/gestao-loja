@@ -20,8 +20,10 @@ public class IndexController {
     private SecurityService securityService;
 
     @GetMapping("/")
-    public String index(){
-        return "index";
+    public ModelAndView index(){
+        ModelAndView mv = new ModelAndView("index");
+        mv.addObject("loggedUser", securityService.findLoggedInUser());
+        return mv;
     }
 
     @GetMapping("/login")
